@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ways of Working Review - Cheatsheet</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f8f9fa;
+    color: #1a1a2e;
+    padding: 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+
+  /* Timeline bar */
+  .timeline {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    margin-bottom: 28px;
+  }
+
+  .timeline h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: #1a1a2e;
+  }
+
+  .time-blocks {
+    display: flex;
+    width: 100%;
+    height: 44px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .time-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.2;
+    padding: 0 4px;
+  }
+
+  .tb-frame { background: #6b7280; flex: 3; }
+  .tb-pr { background: #8b5cf6; flex: 15; }
+  .tb-async { background: #3b82f6; flex: 12; }
+  .tb-meetings { background: #f59e0b; flex: 15; }
+  .tb-code { background: #10b981; flex: 13; }
+  .tb-oncall { background: #ef4444; flex: 12; }
+  .tb-recap { background: #6b7280; flex: 5; }
+
+  .time-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    font-size: 12px;
+    color: #555;
+  }
+
+  .time-legend span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    display: inline-block;
+  }
+
+  /* Topic cards */
+  .topics {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+
+  .topic-card {
+    background: white;
+    border-radius: 12px;
+    padding: 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 220px 1fr 1fr;
+  }
+
+  .topic-left {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .topic-number {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .topic-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .topic-time {
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0.8;
+  }
+
+  .topic-middle {
+    padding: 16px 20px;
+    border-left: 1px solid #f0f0f0;
+  }
+
+  .topic-right {
+    padding: 16px 20px;
+    border-left: 1px solid #f0f0f0;
+    background: #fafafa;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #999;
+    margin-bottom: 8px;
+  }
+
+  .current-state {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.6;
+  }
+
+  .current-state li {
+    margin-bottom: 4px;
+    margin-left: 16px;
+  }
+
+  .questions {
+    font-size: 13px;
+    color: #444;
+    line-height: 1.6;
+  }
+
+  .questions li {
+    margin-bottom: 4px;
+    margin-left: 16px;
+  }
+
+  .decision-box {
+    margin-top: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* Color themes per topic */
+  .topic-pr .topic-left { background: #8b5cf6; color: white; }
+  .topic-pr .topic-number { color: rgba(255,255,255,0.7); }
+  .topic-pr .decision-box { background: #f3f0ff; color: #6d28d9; }
+
+  .topic-async .topic-left { background: #3b82f6; color: white; }
+  .topic-async .topic-number { color: rgba(255,255,255,0.7); }
+  .topic-async .decision-box { background: #eff6ff; color: #1d4ed8; }
+
+  .topic-meetings .topic-left { background: #f59e0b; color: white; }
+  .topic-meetings .topic-number { color: rgba(255,255,255,0.7); }
+  .topic-meetings .decision-box { background: #fffbeb; color: #b45309; }
+
+  .topic-code .topic-left { background: #10b981; color: white; }
+  .topic-code .topic-number { color: rgba(255,255,255,0.7); }
+  .topic-code .decision-box { background: #ecfdf5; color: #047857; }
+
+  .topic-oncall .topic-left { background: #ef4444; color: white; }
+  .topic-oncall .topic-number { color: rgba(255,255,255,0.7); }
+  .topic-oncall .decision-box { background: #fef2f2; color: #dc2626; }
+
+  /* Meeting cadence reference */
+  .meetings-ref {
+    background: white;
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    margin-bottom: 28px;
+  }
+
+  .meetings-ref h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #1a1a2e;
+  }
+
+  .meetings-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .meetings-table th {
+    text-align: left;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-bottom: 2px solid #e5e7eb;
+    font-weight: 600;
+    color: #555;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .meetings-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .badge-daily { background: #fef3c7; color: #92400e; }
+  .badge-weekly { background: #dbeafe; color: #1e40af; }
+  .badge-biweekly { background: #e0e7ff; color: #3730a3; }
+
+  /* Async norms reference */
+  .async-ref {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+
+  .async-ref h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #1e40af;
+  }
+
+  .async-ref .slack-msg {
+    font-size: 13px;
+    color: #333;
+    line-height: 1.6;
+    font-style: italic;
+    padding: 12px 16px;
+    background: white;
+    border-radius: 8px;
+    border-left: 3px solid #3b82f6;
+  }
+
+  .async-ref .slack-meta {
+    font-size: 11px;
+    color: #888;
+    margin-top: 6px;
+  }
+
+  /* Moderator tips */
+  .tips {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+
+  .tips h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #92400e;
+  }
+
+  .tips ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .tips li {
+    font-size: 13px;
+    color: #555;
+    padding: 4px 0;
+    padding-left: 20px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .tips li::before {
+    content: "!";
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+    color: #d97706;
+  }
+
+  @media print {
+    body { padding: 16px; }
+    .topic-card { grid-template-columns: 180px 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Ways of Working Review</h1>
+<div class="subtitle">Team Payments -- 75 min -- Tue Apr 28, 11:15</div>
+
+<!-- Timeline -->
+<div class="timeline">
+  <h2>Session Flow (75 min)</h2>
+  <div class="time-blocks">
+    <div class="time-block tb-frame">Frame<br>3m</div>
+    <div class="time-block tb-async">Async Norms<br>12m</div>
+    <div class="time-block tb-meetings">Meetings<br>15m</div>
+    <div class="time-block" style="background:#1a1a2e; flex:1; font-size:9px;">PM<br>exit</div>
+    <div class="time-block tb-pr">PR Review<br>15m</div>
+    <div class="time-block tb-code">Code Stds<br>13m</div>
+    <div class="time-block tb-oncall">On-call<br>12m</div>
+    <div class="time-block tb-recap">Recap<br>5m</div>
+  </div>
+  <div class="time-legend">
+    <span><div class="legend-dot" style="background:#6b7280;"></div> Frame + Recap</span>
+    <span><div class="legend-dot" style="background:#3b82f6;"></div> Async Norms (with PMs)</span>
+    <span><div class="legend-dot" style="background:#f59e0b;"></div> Meeting Cadence (with PMs)</span>
+    <span><div class="legend-dot" style="background:#8b5cf6;"></div> PR Review Turnaround (eng only)</span>
+    <span><div class="legend-dot" style="background:#10b981;"></div> Code Standards (eng only)</span>
+    <span><div class="legend-dot" style="background:#ef4444;"></div> On-call Setup (eng only)</span>
+  </div>
+</div>
+
+<!-- Topic Cards -->
+<div class="topics">
+
+  <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:#3b82f6; padding:4px 0;">Full team (engineers + PMs)</div>
+
+  <!-- 1: Async Norms -->
+  <div class="topic-card topic-async">
+    <div class="topic-left">
+      <div class="topic-number">Topic 1</div>
+      <div class="topic-title">Async Norms</div>
+      <div class="topic-time">12 min (11:18 - 11:30)</div>
+    </div>
+    <div class="topic-middle">
+      <div class="section-label">Current State</div>
+      <div class="current-state">
+        <ul>
+          <li>Pinned message in team channel (Nov 2025)</li>
+          <li>Core ask: acknowledge tags quickly, even with just an emoji</li>
+          <li>Use calendar/Slack status integration</li>
+          <li>Got positive reactions but compliance varies</li>
+        </ul>
+      </div>
+    </div>
+    <div class="topic-right">
+      <div class="section-label">Questions for the Team</div>
+      <div class="questions">
+        <ul>
+          <li>Is this actually happening? Where does it break?</li>
+          <li>Any timezone gaps where someone goes dark?</li>
+          <li>Should we formalize "respond within X hours"?</li>
+          <li>Slack status -- who's using it, who's not?</li>
+        </ul>
+      </div>
+      <div class="decision-box">Decide: reaffirm, adjust, or formalize the norms</div>
+    </div>
+  </div>
+
+  <!-- 2: Meeting Cadence -->
+  <div class="topic-card topic-meetings">
+    <div class="topic-left">
+      <div class="topic-number">Topic 2</div>
+      <div class="topic-title">Meeting Cadence</div>
+      <div class="topic-time">15 min (11:30 - 11:45)</div>
+    </div>
+    <div class="topic-middle">
+      <div class="section-label">Current State</div>
+      <div class="current-state">
+        <ul>
+          <li>Daily Council -- 15 min, daily</li>
+          <li>Sprint Planning -- 45 min, weekly (Tue)</li>
+          <li>Nicole/Ismayil/Vish -- 30 min, weekly (Thu)</li>
+          <li>Payment Leads Sync -- 30 min, biweekly (Tue)</li>
+          <li>Sprint Review -- 30 min, biweekly</li>
+          <li>+ biweekly 1:1s with Ismayil</li>
+        </ul>
+        <p style="font-size:11px; color:#888; margin-top:6px;">(Project-based syncs like B2B Pay-In, WT Card, Design Review excluded -- those end with their projects)</p>
+      </div>
+    </div>
+    <div class="topic-right">
+      <div class="section-label">Questions for the Team</div>
+      <div class="questions">
+        <ul>
+          <li>Which meetings deliver value? Any feel like a waste?</li>
+          <li>Can anything go async? (e.g., daily standup -> Slack bot?)</li>
+          <li>Anything missing? (FE sync? BE sync? tech debt slot?)</li>
+          <li>Is 15 min daily enough or too much?</li>
+        </ul>
+      </div>
+      <div class="decision-box">Decide: kill, merge, or change frequency</div>
+    </div>
+  </div>
+
+  <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:#ef4444; padding:8px 0 4px 0; border-top: 2px dashed #e5e7eb; margin-top:4px;">Engineers only (Vish + Nicole can leave)</div>
+
+  <!-- 3: PR Review -->
+  <div class="topic-card topic-pr">
+    <div class="topic-left">
+      <div class="topic-number">Topic 3</div>
+      <div class="topic-title">PR Review Turnaround</div>
+      <div class="topic-time">15 min (11:45 - 12:00)</div>
+    </div>
+    <div class="topic-middle">
+      <div class="section-label">Current State</div>
+      <div class="current-state">
+        <ul>
+          <li>No explicit SLA or turnaround target</li>
+          <li>No auto-assignment or round-robin</li>
+          <li>Ad hoc reviewer selection</li>
+        </ul>
+      </div>
+    </div>
+    <div class="topic-right">
+      <div class="section-label">Questions for the Team</div>
+      <div class="questions">
+        <ul>
+          <li>What turnaround feels right? (4h? same day? next morning?)</li>
+          <li>Are there bottlenecks -- certain people always reviewing?</li>
+          <li>Auto-assign or manual? Round-robin?</li>
+          <li>How to handle large PRs vs. small fixes?</li>
+        </ul>
+      </div>
+      <div class="decision-box">Decide: target SLA + enforcement mechanism</div>
+    </div>
+  </div>
+
+  <!-- 4: Code Standards -->
+  <div class="topic-card topic-code">
+    <div class="topic-left">
+      <div class="topic-number">Topic 4</div>
+      <div class="topic-title">Code Standards</div>
+      <div class="topic-time">13 min (12:00 - 12:13)</div>
+    </div>
+    <div class="topic-middle">
+      <div class="section-label">Current State</div>
+      <div class="current-state">
+        <ul>
+          <li>Existing linting/formatting tooling in place</li>
+          <li>No team-specific style guide beyond company defaults</li>
+          <li>Reviewers sometimes ask for different things</li>
+        </ul>
+      </div>
+    </div>
+    <div class="topic-right">
+      <div class="section-label">Questions for the Team</div>
+      <div class="questions">
+        <ul>
+          <li>PR size expectations -- max lines? Should we enforce?</li>
+          <li>Test coverage expectations for new code?</li>
+          <li>Naming conventions, file structure pain points?</li>
+          <li>FE/BE consistency issues?</li>
+          <li>Who writes it down? Where does it live?</li>
+        </ul>
+      </div>
+      <div class="decision-box">Decide: top 2-3 standards to codify + owner</div>
+    </div>
+  </div>
+
+  <!-- 5: On-call -->
+  <div class="topic-card topic-oncall">
+    <div class="topic-left">
+      <div class="topic-number">Topic 5</div>
+      <div class="topic-title">On-call Setup</div>
+      <div class="topic-time">12 min (12:13 - 12:25)</div>
+    </div>
+    <div class="topic-middle">
+      <div class="section-label">Current State</div>
+      <div class="current-state">
+        <ul>
+          <li>Individual incident.io profiles created</li>
+          <li>Unofficial daily on-call person exists</li>
+          <li>Copied Amsterdam team's setup as starting template -- needs editing</li>
+          <li>Company-wide training is coming (compulsory)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="topic-right">
+      <div class="section-label">Questions for the Team</div>
+      <div class="questions">
+        <ul>
+          <li>Review: does the copied setup make sense for us?</li>
+          <li>What needs editing in our rotation/runbook?</li>
+          <li>Hours coverage: who covers which window?</li>
+          <li>Escalation path -- who's backup?</li>
+        </ul>
+      </div>
+      <div class="decision-box">Decide: what to adjust in the template + escalation path</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Async norms reference -->
+<div class="async-ref">
+  <h2>Reference: Pinned Async Norms (Nov 2025)</h2>
+  <div class="slack-msg">
+    "Since we are fully remote, our responsiveness to each other really matters. If someone asks you something or tags you, a quick reply goes a long way. Even if it's just 'Lemme check', 'looking into it' or 'I will get back to you in N minutes/hours'. And if you are swamped, even a quick emoji helps people know you've seen it. Also either use calendar with Slack status integration, or change your status to meaningful emoji/message. Radio silence creates blockers for everyone else."
+  </div>
+  <div class="slack-meta">Posted by Ismayil in #team-payments-private -- Nov 20, 2025</div>
+</div>
+
+<!-- Recurring meetings reference -->
+<div class="meetings-ref">
+  <h2>Current Recurring Meetings (permanent, non-project)</h2>
+  <table class="meetings-table">
+    <thead>
+      <tr>
+        <th>Meeting</th>
+        <th>Cadence</th>
+        <th>Duration</th>
+        <th>Day/Time</th>
+        <th>Owner</th>
+        <th>Attendees</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Daily Council</td>
+        <td><span class="badge badge-daily">Daily</span></td>
+        <td>15 min</td>
+        <td>Mon-Fri 10:00</td>
+        <td>Nicole</td>
+        <td>Full team</td>
+      </tr>
+      <tr>
+        <td>Sprint Planning</td>
+        <td><span class="badge badge-weekly">Weekly</span></td>
+        <td>45 min</td>
+        <td>Tue 10:15</td>
+        <td>Nicole</td>
+        <td>Nicole, Ismayil, Vish</td>
+      </tr>
+      <tr>
+        <td>Nicole/Ismayil/Vish</td>
+        <td><span class="badge badge-weekly">Weekly</span></td>
+        <td>30 min</td>
+        <td>Thu 13:00</td>
+        <td>Nicole</td>
+        <td>PM triad</td>
+      </tr>
+      <tr>
+        <td>Payment Leads Sync</td>
+        <td><span class="badge badge-biweekly">Biweekly</span></td>
+        <td>30 min</td>
+        <td>Tue 15:00</td>
+        <td>Vish</td>
+        <td>Cross-functional</td>
+      </tr>
+      <tr>
+        <td>Sprint Review</td>
+        <td><span class="badge badge-biweekly">Biweekly</span></td>
+        <td>30 min</td>
+        <td>Tue 17:00</td>
+        <td>George S.</td>
+        <td>Company-wide</td>
+      </tr>
+      <tr>
+        <td>1:1s with Ismayil</td>
+        <td><span class="badge badge-biweekly">Biweekly</span></td>
+        <td>30 min</td>
+        <td>Various</td>
+        <td>Ismayil</td>
+        <td>Each report</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Tips -->
+<div class="tips">
+  <h2>Moderator Notes</h2>
+  <ul>
+    <li>This is a review session, not a creation session. State current state, get reactions, decide. No deep-dives.</li>
+    <li>If a topic runs long, park it: "We'll take this offline with [name]. Moving on."</li>
+    <li>For each topic, aim for one concrete decision or action item. Not "we should improve X" but "Y will do Z by [date]."</li>
+    <li>After Meeting Cadence (at ~30 min), thank Vish and Nicole and let them leave. The remaining 3 topics are pure engineering.</li>
+    <li>Bring up the pinned Slack message on screen during async norms. People will react to seeing their own behavior reflected.</li>
+    <li>Meeting cadence: have the calendar data ready. People forget which recurring meetings they're in.</li>
+    <li>On-call is last intentionally -- it's mostly a review of what's already set up, and training is out of team's hands.</li>
+    <li>Capture decisions in a shared doc as you go. This feeds into Friday's action items session.</li>
+  </ul>
+</div>
+
+</body>
+</html>

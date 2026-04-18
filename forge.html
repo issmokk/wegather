@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forge - Team Build Session Cheatsheet</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f8f9fa;
+    color: #1a1a2e;
+    padding: 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 32px;
+  }
+
+  /* Concept banner */
+  .concept {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    color: white;
+    text-align: center;
+  }
+
+  .concept .tagline {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .concept .desc {
+    font-size: 14px;
+    color: #cbd5e1;
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  /* Timeline */
+  .timeline {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    margin-bottom: 28px;
+  }
+
+  .timeline h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #1a1a2e;
+  }
+
+  .time-blocks {
+    display: flex;
+    width: 100%;
+    height: 44px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .time-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.2;
+    padding: 0 2px;
+  }
+
+  .tb-pitch { background: #f59e0b; flex: 15; }
+  .tb-shape { background: #8b5cf6; flex: 20; }
+  .tb-build { background: #2563eb; flex: 90; }
+  .tb-demo { background: #059669; flex: 25; }
+  .tb-buffer { background: #94a3b8; flex: 15; }
+
+  .time-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    font-size: 11px;
+    color: #555;
+  }
+
+  .time-legend span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    display: inline-block;
+  }
+
+  /* Phase cards */
+  .phase-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px 24px;
+    border-left: 5px solid;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+  }
+
+  .phase-card.pitch { border-left-color: #f59e0b; }
+  .phase-card.shape { border-left-color: #8b5cf6; }
+  .phase-card.build { border-left-color: #2563eb; }
+  .phase-card.demo { border-left-color: #059669; }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .phase-name {
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  .pitch .phase-name { color: #b45309; }
+  .shape .phase-name { color: #7c3aed; }
+  .build .phase-name { color: #2563eb; }
+  .demo .phase-name { color: #059669; }
+
+  .phase-time {
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    padding: 3px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+
+  .pitch .phase-time { background: #f59e0b; }
+  .shape .phase-time { background: #8b5cf6; }
+  .build .phase-time { background: #2563eb; }
+  .demo .phase-time { background: #059669; }
+
+  .phase-desc {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .phase-detail {
+    font-size: 12px;
+    color: #777;
+    line-height: 1.6;
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+  }
+
+  .phase-detail strong {
+    color: #555;
+    font-weight: 600;
+  }
+
+  /* Roles grid */
+  .roles {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    margin-bottom: 28px;
+  }
+
+  .roles h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #1a1a2e;
+  }
+
+  .roles-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .role-card {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 14px 16px;
+    border-left: 3px solid;
+  }
+
+  .role-card.pm { border-left-color: #f59e0b; }
+  .role-card.design { border-left-color: #ec4899; }
+  .role-card.fe { border-left-color: #06b6d4; }
+  .role-card.be { border-left-color: #2563eb; }
+  .role-card.platform { border-left-color: #8b5cf6; }
+  .role-card.qa { border-left-color: #059669; }
+  .role-card.em { border-left-color: #475569; }
+
+  .role-who {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 4px;
+  }
+
+  .role-does {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.5;
+  }
+
+  /* Rules box */
+  .rules {
+    background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+
+  .rules h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #1e40af;
+  }
+
+  .rules p {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+
+  .rules p:last-child { margin-bottom: 0; }
+
+  .rules strong { color: #1e40af; }
+
+  /* Seed ideas */
+  .seeds {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    border: 2px dashed #f59e0b;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    margin-bottom: 24px;
+  }
+
+  .seeds h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #b45309;
+  }
+
+  .seeds .seeds-note {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 12px;
+  }
+
+  .seeds-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+
+  .seed {
+    background: #fffbeb;
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+
+  .seed-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #92400e;
+    margin-bottom: 4px;
+  }
+
+  .seed-desc {
+    font-size: 11px;
+    color: #666;
+    line-height: 1.4;
+  }
+
+  /* Tips */
+  .tips {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+
+  .tips h2 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #92400e;
+  }
+
+  .tips ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .tips li {
+    font-size: 13px;
+    color: #555;
+    padding: 4px 0;
+    padding-left: 20px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .tips li::before {
+    content: "!";
+    position: absolute;
+    left: 0;
+    font-weight: 700;
+    color: #d97706;
+  }
+
+  @media print {
+    body { padding: 16px; }
+    .roles-grid { grid-template-columns: 1fr; }
+    .seeds-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Forge</h1>
+<div class="subtitle">Team Payments -- 165 min -- Thu Apr 30, 13:00</div>
+
+<!-- Concept -->
+<div class="concept">
+  <div class="tagline">One team. One idea. Under 3 hours. Ship or scrap.</div>
+  <div class="desc">The whole team picks one idea and builds it together. Not competing teams, not a spec review. One thing, built by everyone, with a live demo at the end. Claude Code accelerates the build. Humans make the decisions.</div>
+</div>
+
+<!-- Timeline -->
+<div class="timeline">
+  <h2>Session Flow (165 min)</h2>
+  <div class="time-blocks">
+    <div class="time-block tb-pitch">Pitch<br>15m</div>
+    <div class="time-block tb-shape">Shape<br>20m</div>
+    <div class="time-block tb-build">Build<br>90m</div>
+    <div class="time-block tb-demo">Demo<br>25m</div>
+    <div class="time-block tb-buffer">Buffer<br>15m</div>
+  </div>
+  <div class="time-legend">
+    <span><div class="legend-dot" style="background:#f59e0b;"></div> Pitch + Pick (13:00-13:15)</span>
+    <span><div class="legend-dot" style="background:#8b5cf6;"></div> Shape (13:15-13:35)</span>
+    <span><div class="legend-dot" style="background:#2563eb;"></div> Build (13:35-15:05)</span>
+    <span><div class="legend-dot" style="background:#059669;"></div> Demo + Destroy (15:05-15:30)</span>
+    <span><div class="legend-dot" style="background:#94a3b8;"></div> Buffer / walk to escape room (15:30-15:45)</span>
+  </div>
+</div>
+
+<!-- Phase cards -->
+<div class="phase-card pitch">
+  <div class="phase-header">
+    <div class="phase-name">Pitch + Pick</div>
+    <div class="phase-time">13:00 - 13:15 (15 min)</div>
+  </div>
+  <div class="phase-desc">
+    Anyone pitches an idea in 60 seconds. No prep, no slides. Can be anything: an internal tool, a game, a prototype, something absurd. Only constraint: it needs frontend, backend, and design work.
+  </div>
+  <div class="phase-detail">
+    <strong>Voting:</strong> Dot-vote (2 dots each), pick the winner. If it's close, Ismayil breaks the tie. Move fast - don't deliberate.
+  </div>
+</div>
+
+<div class="phase-card shape">
+  <div class="phase-header">
+    <div class="phase-name">Shape</div>
+    <div class="phase-time">13:15 - 13:35 (20 min)</div>
+  </div>
+  <div class="phase-desc">
+    Whole team at the whiteboard. PMs define what "done" looks like, scoped to 90 min of build time. Luke sketches the UI. Engineers call out what's feasible and how to split the work.
+  </div>
+  <div class="phase-detail">
+    <strong>Output:</strong> A shared sketch on the whiteboard and a task list on sticky notes. Each sticky = one chunk of work someone can grab. Assign nothing - people self-select during build.
+  </div>
+</div>
+
+<div class="phase-card build">
+  <div class="phase-header">
+    <div class="phase-name">Build</div>
+    <div class="phase-time">13:35 - 15:05 (90 min)</div>
+  </div>
+  <div class="phase-desc">
+    Everyone works. Grab a sticky, build it, grab the next one. One shared room, music on. No stand-ups, no check-ins. If you're blocked, shout. Claude Code is the accelerator - engineers use it to move fast. Decisions stay human.
+  </div>
+  <div class="phase-detail">
+    <strong>Ismayil:</strong> Float between groups, unblock, keep energy up, watch the clock. Call "30 min left" and "10 min left" loudly.
+  </div>
+</div>
+
+<div class="phase-card demo">
+  <div class="phase-header">
+    <div class="phase-name">Demo + Destroy</div>
+    <div class="phase-time">15:05 - 15:30 (25 min)</div>
+  </div>
+  <div class="phase-desc">
+    PMs present what was built. Live demo - show it working (or failing spectacularly, which is equally fun). Then the team decides: keep it or ceremonially destroy it. Either way, the point was building it together.
+  </div>
+  <div class="phase-detail">
+    <strong>Format:</strong> Vish or Nicole narrates the demo (5 min). Team reacts (5 min). Each person shares one highlight from the build - a moment, a hack, a breakthrough (10 min). Vote: keep or destroy (5 min).
+  </div>
+</div>
+
+<!-- Roles -->
+<div class="roles">
+  <h2>Roles During Build</h2>
+  <div class="roles-grid">
+    <div class="role-card pm">
+      <div class="role-who">Vish + Nicole (PM)</div>
+      <div class="role-does">Define "done." Write copy and content. Test flows as real users. Manage scope - cut ruthlessly when time runs short. Prepare and deliver the demo.</div>
+    </div>
+    <div class="role-card design">
+      <div class="role-who">Luke (Design)</div>
+      <div class="role-does">UI/UX decisions. Sketch during Shape, produce assets during Build. Visual polish. Pair with FE on layout and interaction details.</div>
+    </div>
+    <div class="role-card fe">
+      <div class="role-who">Tural + Hanna (FE)</div>
+      <div class="role-does">Build the interface. Use Claude Code to accelerate. Coordinate with Luke on design fidelity and with BE on API contracts.</div>
+    </div>
+    <div class="role-card be">
+      <div class="role-who">Valerii + Habil + Gabil + Marat (BE)</div>
+      <div class="role-does">Build the backend, API, data layer. Use Claude Code to accelerate. Agree on API shape with FE early in build, then work in parallel. Everyone tests their own work.</div>
+    </div>
+    <div class="role-card platform">
+      <div class="role-who">Dimitris (Platform)</div>
+      <div class="role-does">Get it running. Set up the environment, deployment, infra. If there's time, add basic observability (his domain). The one who makes the demo possible.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Rules -->
+<div class="rules">
+  <h2>Ground Rules</h2>
+  <p><strong>One team, one thing.</strong> No splitting into competing groups. Everyone contributes to the same build.</p>
+  <p><strong>Scope is sacred.</strong> PMs have final say on what gets cut. If something won't fit in 90 min, it's out.</p>
+  <p><strong>Claude Code is a tool, not a teammate.</strong> Use it to generate boilerplate, scaffold, debug. Don't use it to make product decisions.</p>
+  <p><strong>It doesn't need to be perfect.</strong> A working demo with rough edges beats a polished spec with no output.</p>
+  <p><strong>It doesn't need to survive.</strong> The point is the experience of building together, not the artifact.</p>
+</div>
+
+<!-- Seed ideas -->
+<div class="seeds">
+  <h2>Seed Ideas (if the room needs a spark)</h2>
+  <div class="seeds-note">Only use these if pitches are slow. The best idea comes from the team.</div>
+  <div class="seeds-grid">
+    <div class="seed">
+      <div class="seed-name">Team Trivia</div>
+      <div class="seed-desc">Live multiplayer trivia game about the team. "Who has the most PRs this quarter?" Real-time scoreboard.</div>
+    </div>
+    <div class="seed">
+      <div class="seed-name">Payment Roulette</div>
+      <div class="seed-desc">Visualize a random payment flowing through the WeTravel system in real-time. Make the invisible visible.</div>
+    </div>
+    <div class="seed">
+      <div class="seed-name">WeTravel Wrapped</div>
+      <div class="seed-desc">Spotify Wrapped but for WeTravel data. "Your team processed $X this quarter. Your favorite PSP was..."</div>
+    </div>
+    <div class="seed">
+      <div class="seed-name">Office Lunch Picker</div>
+      <div class="seed-desc">App that settles the eternal "where do we eat?" debate. Location-aware, preference-weighted, with veto power.</div>
+    </div>
+    <div class="seed">
+      <div class="seed-name">Deploy Confetti</div>
+      <div class="seed-desc">Slack bot + web dashboard that triggers confetti and a sound effect every time the team ships to prod.</div>
+    </div>
+    <div class="seed">
+      <div class="seed-name">Retro Bot</div>
+      <div class="seed-desc">Anonymous retro tool: submit, vote, discuss. Built from scratch in 90 min. Use it for Friday's gathering retro.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Moderator Notes -->
+<div class="tips">
+  <h2>Moderator Notes</h2>
+  <ul>
+    <li>Pitch + Pick must stay at 15 min. If you let it run long, you eat into build time and energy drops. Fast decision, move on.</li>
+    <li>During Shape, actively assign Luke to sketch on the whiteboard while PMs talk scope. Parallel work starts here, not after.</li>
+    <li>The first 15 min of Build is chaos - that's normal. People figure out their lane. Resist the urge to over-coordinate.</li>
+    <li>At the 45-min mark of Build (14:20), check progress. If the scope is too big, pull PMs aside and cut. Protect the demo.</li>
+    <li>Music matters. Put on a playlist. It signals "this is not a meeting."</li>
+    <li>Demo must be live, not a walkthrough of code. If the thing crashes during demo, that's a story too.</li>
+    <li>The "keep or destroy" vote at the end is the release valve. It makes the whole thing feel low-stakes and fun.</li>
+    <li>Photograph the whiteboard from Shape. It's a great artifact regardless of what happens to the code.</li>
+  </ul>
+</div>
+
+</body>
+</html>
